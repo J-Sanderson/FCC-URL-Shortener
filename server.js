@@ -8,9 +8,10 @@ app.get("/", function(req, res) {
 });
 
 //create new shortened url
-app.get("/new/:url", function(req, res) {
+app.get("/new/*", function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(controller.parseURL(req.params.url)));
+  controller.parseURL(req.params[0], res);
+  //res.send(JSON.stringify(controller.parseURL(req.params[0])));
 });
 
 //retrieve existing short url
