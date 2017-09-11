@@ -1,4 +1,5 @@
-var express = require('express');
+const express = require('express');
+const controller = require('./controller');
 var app = express();
 app.use(express.static('public'));
 
@@ -9,8 +10,7 @@ app.get("/", function(req, res) {
 //create new shortened url
 app.get("/new/:url", function(req, res) {
   res.setHeader('Content-Type', 'application/json');
-  //placeholder JSON
-  res.send(JSON.stringify({original_url: req.params.url, short_url: "tbd"}))
+  res.send(JSON.stringify(controller.parseURL(req.params.url)));
 });
 
 //retrieve existing short url
