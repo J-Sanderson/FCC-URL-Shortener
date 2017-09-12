@@ -9,25 +9,35 @@ var urlSchema = new mongoose.Schema({
 var Urlmodel = mongoose.model("URL", urlSchema);
 
 function parseURL(url, res) {
-  //does the url already exist in the database? return if so
-  //Url.find(etc)
-  
-  //if not - is it a valid url?
-  if (validUrl.isUri(url)) {
-    //yes - add url to database and return json
-    //need to generate unique IDs for the 'short' property
-    //currently using 1 as a placeholder
-    var newUrl = Urlmodel({url: url, short: 1}).save(function(err, data) {
-      if (err) throw err;
-      console.log('saved ' + url);
+  //search for URL in database
+  Urlmodel.findOne({url: url}, function(err, data) {
+    if (err) throw err;
+    //does it already exist there?
+    if (data !== null) {
       res.send(JSON.stringify({original_url: data.url, short_url: data.short}));
-    })
-    
-  } else {
-    //no - return error
-    res.send(JSON.stringify({error: "URL invalid"}));
-  }
-  
+      return;
+    }
+    //if not - is it a valid url?
+    if (validUrl.isUri(url)) {
+      //yes - add url to database and return json
+      //find current highest value for 'short;
+      Urlmodel.find(function(err, data) {
+        if (err) throw err;
+        //get highest value + 1
+        var short = data[0].short + 1;
+        //save to database
+        var newUrl = Urlmodel({url: url, short: short}).save(function(err, data) {
+          if (err) throw err;
+          res.send(JSON.stringify({original_url: data.url, short_url: data.short}));
+          return;
+      });
+      }).sort({short: -1}).limit(1);
+    } else {
+      //no - return error
+      res.send(JSON.stringify({error: "URL invalid"}));
+      return;
+    }
+  });
 }
   
 function retreiveURL() {
