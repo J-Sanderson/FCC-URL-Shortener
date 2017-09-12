@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>URL Shortener Microservice!</title>
-    <meta name="description" content="A cool thing made with Glitch">
+    <title>URL Shortener Microservice</title>
+    <meta name="description" content="URL shortener made with Glitch.com">
     <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,8 +20,38 @@
     </h2>
 
     <p>
-      To do...
+      To get a shortened URL, pass a URL to the /new/ endpoint. If your request contains a valid URL, the service will return 
+      a shortened form containing an ID number.
     </p>
+      <p>
+        Examples:
+      </p>
+      <ul>
+        <li><a href="https://miniurl-jsanderson.glitch.me/new/http://www.google.com">
+          https://miniurl-jsanderson.glitch.me/new/http://www.google.com</a>
+        </li>
+        <li><a href="https://miniurl-jsanderson.glitch.me/new/http://www.bbc.co.uk">
+          https://miniurl-jsanderson.glitch.me/new/http://www.bbc.co.uk</a>
+        </li>
+        <li><a href="https://miniurl-jsanderson.glitch.me/new/not a valid URL">
+          https://miniurl-jsanderson.glitch.me/new/not a valid URL</a>
+        </li>
+      </ul>
+      
+      
+      <p>
+        To return an existing shortened URL, pass the ID number to the /s/ endpoint. If your request contains a saved URL, 
+        the service will redirect you to it.
+      </p>
+      <p>
+        Examples:
+      </p>
+      <ul>
+        <li><a href="https://miniurl-jsanderson.glitch.me/s/1">https://miniurl-jsanderson.glitch.me/s/1</a></li>
+        <li><a href="https://miniurl-jsanderson.glitch.me/s/5">https://miniurl-jsanderson.glitch.me/s/5</a></li>
+        <li><a href="https://miniurl-jsanderson.glitch.me/s/0">https://miniurl-jsanderson.glitch.me/s/0</a></li>
+      </ul>
+      
     </div>
     <div id="footer">
       <p>
