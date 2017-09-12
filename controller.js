@@ -9,12 +9,13 @@ var urlSchema = new mongoose.Schema({
 var Urlmodel = mongoose.model("URL", urlSchema);
 
 function parseURL(url, res) {
+  res.setHeader('Content-Type', 'application/json');
   //search for URL in database
   Urlmodel.findOne({url: url}, function(err, data) {
     if (err) throw err;
     //does it already exist there?
     if (data !== null) {
-      res.send(JSON.stringify({original_url: data.url, short_url: data.short}));
+      res.send(JSON.stringify({original_url: data.url, short_url: 'https://miniurl-jsanderson.glitch.me/s/' + data.short}));
       return;
     }
     //if not - is it a valid url?
@@ -28,7 +29,7 @@ function parseURL(url, res) {
         //save to database
         var newUrl = Urlmodel({url: url, short: short}).save(function(err, data) {
           if (err) throw err;
-          res.send(JSON.stringify({original_url: data.url, short_url: data.short}));
+          res.send(JSON.stringify({original_url: data.url, short_url: 'https://miniurl-jsanderson.glitch.me/s/' + data.short}));
           return;
       });
       }).sort({short: -1}).limit(1);
@@ -40,9 +41,20 @@ function parseURL(url, res) {
   });
 }
   
-function retreiveURL() {
-  console.log("this will retreive an existing URL");
+function getURL(short, res) {
+  //check database for given short ID
+  Urlmodel.findOne({short: short}, function(err, data) {
+    if (err) throw err;
+    //does the ID exist?
+    if (data !== null) {
+      res.redirect(data.url);
+    } else {
+      //not in database, return JSON error
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({error: "URL not in database"}));
+    }
+  });
 }
 
 module.exports.parseURL = parseURL;
-module.exports.retreiveURL = retreiveURL;
+module.exports.getURL = getURL;

@@ -9,15 +9,12 @@ app.get("/", function(req, res) {
 
 //create new shortened url
 app.get("/new/*", function(req, res) {
-  res.setHeader('Content-Type', 'application/json');
   controller.parseURL(req.params[0], res);
-  //res.send(JSON.stringify(controller.parseURL(req.params[0])));
 });
 
 //retrieve existing short url
-app.get("/:url", function(req, res) {
-  //placeholder message
-  res.send("This will direct you to the given URL, if there is one stored!")
+app.get("/s/*", function(req, res) {
+  controller.getURL(req.params[0], res);
 });
 
 app.listen(process.env.PORT);
